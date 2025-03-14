@@ -1,4 +1,8 @@
-import dotenv from "dotenv";
+import * as dotenv from 'dotenv';
+
+delete process.env.PORT;
+delete process.env.API_KEY;
+delete process.env.DEVICES;
 
 dotenv.config();
 
@@ -11,7 +15,5 @@ if (!API_KEY) {
 }
 
 const DEVICES = JSON.parse(process.env.DEVICES || '{}');
-
-console.log(DEVICES.main);
 
 export { API_KEY, DEVICES, PORT };

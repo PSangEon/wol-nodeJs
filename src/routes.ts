@@ -4,12 +4,17 @@ import { wakeDevice } from "./wolService";
 
 const router = Router();
 
-router.get("/wake", async (req: Request, res: Response): Promise<void> => {
-  const { key, device } = req.query;
+// base64로 인코딩하는 함수
+function encodeBase64(text: string): string {
+  return Buffer.from(text).toString('base64');
+}
 
-  if (key !== API_KEY) {
+router.get("/wake", async (req: Request, res: Response): Promise<void> => {
+  const { device, key } = req.query;
+  // key 값이 없거나, key를 base64로 인코딩한 값과 비교
+  if (typeof key !== "string" || encodeBase64(key) !== API_KEY) {
     res.status(403).json({ success: false, message: "잘못된 API 키" });
-    return; // <<== 반환을 명확하게 추가!
+    return; // 오류 발생 시 더 이상 진행하지 않도록 반환
   }
 
   if (!device || typeof device !== "string") {
